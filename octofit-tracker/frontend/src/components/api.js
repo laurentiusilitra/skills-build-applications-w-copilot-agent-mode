@@ -1,8 +1,15 @@
 export const getApiBaseUrl = () => {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME;
+  const explicitCodespaceName = import.meta.env.VITE_CODESPACE_NAME;
 
-  if (codespaceName && codespaceName.trim() !== '') {
-    return `https://${codespaceName}-8000.app.github.dev/api`;
+  if (explicitCodespaceName && explicitCodespaceName.trim() !== '') {
+    return `https://${explicitCodespaceName}-8000.app.github.dev/api`;
+  }
+
+  const hostname = window.location.hostname;
+  const match = hostname.match(/^(.*)-5173\.app\.github\.dev$/);
+
+  if (match && match[1]) {
+    return `https://${match[1]}-8000.app.github.dev/api`;
   }
 
   return 'http://localhost:8000/api';

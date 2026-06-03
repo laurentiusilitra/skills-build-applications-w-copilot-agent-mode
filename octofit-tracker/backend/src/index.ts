@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import { ActivityModel } from './models/Activity';
 import { LeaderboardModel } from './models/Leaderboard';
 import { TeamModel } from './models/Team';
@@ -13,8 +14,24 @@ const codespaceName = process.env.CODESPACE_NAME;
 const apiBaseUrl = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
   : 'http://localhost:8000';
+const frontendOrigin = codespaceName
+  ? `https://${codespaceName}-5173.app.github.dev`
+  : 'http://localhost:5173';
+const allowedOrigins = ['http://localhost:5173', frontendOrigin];
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  })
+);
 
 app.get('/api/health', (_req, res) => {
   res.json({
