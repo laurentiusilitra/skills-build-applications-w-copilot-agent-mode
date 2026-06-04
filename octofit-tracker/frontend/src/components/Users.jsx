@@ -9,6 +9,9 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(`${getApiBaseUrl()}/users/`);
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
         const payload = await response.json();
         setUsers(normalizeCollection(payload, 'users'));
       } catch (fetchError) {
