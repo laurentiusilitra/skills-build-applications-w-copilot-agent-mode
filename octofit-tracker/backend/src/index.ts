@@ -74,6 +74,11 @@ app.get('/api/workouts/', async (_req, res) => {
   res.json({ count: workouts.length, apiBaseUrl, workouts });
 });
 
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('Unhandled error', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
 const startServer = async () => {
   try {
     await mongoose.connect(mongoUri, { dbName: 'octofit_db' });
