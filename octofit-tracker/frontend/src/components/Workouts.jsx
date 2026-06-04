@@ -9,6 +9,9 @@ const Workouts = () => {
     const fetchWorkouts = async () => {
       try {
         const response = await fetch(`${getApiBaseUrl()}/workouts/`);
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
         const payload = await response.json();
         setWorkouts(normalizeCollection(payload, 'workouts'));
       } catch (fetchError) {
