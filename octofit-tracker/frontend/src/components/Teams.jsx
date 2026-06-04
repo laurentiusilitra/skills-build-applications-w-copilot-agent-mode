@@ -9,6 +9,9 @@ const Teams = () => {
     const fetchTeams = async () => {
       try {
         const response = await fetch(`${getApiBaseUrl()}/teams/`);
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`);
+        }
         const payload = await response.json();
         setTeams(normalizeCollection(payload, 'teams'));
       } catch (fetchError) {
